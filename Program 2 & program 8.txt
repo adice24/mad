@@ -1,0 +1,169 @@
+
+Program 2 – Display Portrait or Landscape Mode
+
+activity_main.xml
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/orientation_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:layout_centerInParent="true"/>
+
+</RelativeLayout>
+MainActivity.java
+package com.example.orientationchange;
+
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.widget.TextView;
+import android.view.WindowManager;
+import android.view.Display;
+import android.graphics.Point;
+
+public class MainActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        TextView orientationMessage =
+                findViewById(R.id.orientation_message);
+
+        WindowManager wm =
+                (WindowManager) getSystemService(WINDOW_SERVICE);
+
+        Display d = wm.getDefaultDisplay();
+        Point size = new Point();
+        d.getSize(size);
+
+        int width = size.x;
+        int height = size.y;
+
+        if (width > height) {
+            orientationMessage.setText("Landscape mode");
+        } else {
+            orientationMessage.setText("Portrait mode");
+        }
+    }
+}
+
+Program 8 – Saving and Retrieving Data Using SharedPreferences
+
+activity_main.xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/editTextName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Name"/>
+
+    <EditText
+        android:id="@+id/editTextAge"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Age"
+        android:inputType="number"/>
+
+    <Button
+        android:id="@+id/buttonSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save"/>
+
+    <Button
+        android:id="@+id/buttonLoad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Load"/>
+
+    <TextView
+        android:id="@+id/textViewResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:paddingTop="20dp"/>
+</LinearLayout>
+MainActivity.java
+package com.example.sharedpreferencesapp;
+
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.content.SharedPreferences;
+import android.view.View;
+import android.widget.*;
+
+public class MainActivity extends AppCompatActivity {
+
+    EditText editTextName, editTextAge;
+    Button buttonSave, buttonLoad;
+    TextView textViewResult;
+    SharedPreferences sharedPreferences;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        editTextName = findViewById(R.id.editTextName);
+        editTextAge = findViewById(R.id.editTextAge);
+        buttonSave = findViewById(R.id.buttonSave);
+        buttonLoad = findViewById(R.id.buttonLoad);
+        textViewResult = findViewById(R.id.textViewResult);
+
+        sharedPreferences =
+                getSharedPreferences(
+                        "UserPreferences",
+                        MODE_PRIVATE);
+
+        buttonSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                SharedPreferences.Editor editor =
+                        sharedPreferences.edit();
+
+                editor.putString(
+                        "name",
+                        editTextName.getText().toString());
+
+                editor.putInt(
+                        "age",
+                        Integer.parseInt(
+                                editTextAge.getText().toString()));
+
+                editor.apply();
+            }
+        });
+
+        buttonLoad.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String name =
+                        sharedPreferences.getString(
+                                "name", "");
+
+                int age =
+                        sharedPreferences.getInt(
+                                "age", 0);
+
+                textViewResult.setText(
+                        "Name: " + name +
+                                "\nAge: " + age);
+            }
+        });
+    }
+}

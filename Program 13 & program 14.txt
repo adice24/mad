@@ -1,0 +1,166 @@
+Program 13 – Login Window and User Validation
+
+activity_main.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/input_username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Username"/>
+
+    <EditText
+        android:id="@+id/input_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Password"
+        android:inputType="textPassword"/>
+
+    <Button
+        android:id="@+id/button_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Login"/>
+
+</LinearLayout>
+MainActivity.java
+package com.example.loginappvalidation;
+
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+public class MainActivity extends AppCompatActivity {
+
+    private EditText inputUsername;
+    private EditText inputPassword;
+    private Button buttonLogin;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        inputUsername =
+                findViewById(R.id.input_username);
+
+        inputPassword =
+                findViewById(R.id.input_password);
+
+        buttonLogin =
+                findViewById(R.id.button_login);
+
+        buttonLogin.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        validateLogin();
+                    }
+                });
+    }
+
+    private void validateLogin() {
+
+        String username =
+                inputUsername.getText().toString().trim();
+
+        String password =
+                inputPassword.getText().toString().trim();
+
+        if (TextUtils.isEmpty(username)
+                || TextUtils.isEmpty(password)) {
+
+            Toast.makeText(
+                    this,
+                    "Username and Password cannot be empty",
+                    Toast.LENGTH_SHORT).show();
+
+        } else {
+
+            if (username.equals("admin")
+                    && password.equals("1234")) {
+
+                Toast.makeText(
+                        this,
+                        "Login Successful",
+                        Toast.LENGTH_SHORT).show();
+
+            } else {
+
+                Toast.makeText(
+                        this,
+                        "Login Fail",
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+}
+
+
+
+MAD Program 14 – Deploying Android Applications
+
+Mobile Application Development Laboratory
+
+1. Objective
+To understand the key elements and procedural steps involved in preparing,
+signing, and publishing an Android application to the Google Play Store.
+2. Key Concepts
+APK (Android Package): The file format used by Android for distributing and
+installing mobile apps. It contains the app code, resources, assets, and manifest.
+Google Play Developer Console: A platform for managing app listings, releases
+(Alpha, Beta, Production), monetization, and performance monitoring.
+App Signing: The critical security process of digitally signing an APK using a
+keystore to verify authenticity.
+Release Channels: Stages of testing including Internal, Closed (Alpha), and Open
+(Beta) before full Production.
+3. Procedure
+Step 1: Preparing the App for Release
+Testing & Optimization: Test the app on various devices and use tools like
+ProGuard to shrink and obfuscate code.
+Version Information: Update the versionCode and versionName in the
+build.gradle.kts file.
+defaultConfig {
+versionCode 2 // Increment for each release
+versionName "1.1" // Reflects new version for users
+}
+Permissions Check: Ensure only necessary permissions are declared in
+AndroidManifest.xml (e.g., INTERNET, ACCESS_FINE_LOCATION).
+
+Step 2: Generating a Signed APK
+1. In Android Studio, navigate to Build > Generate Signed Bundle / APK.
+2. Select APK and click Next.
+3. Create Keystore: If none exists, click "Create new..." and define a path,
+passwords, and a key alias
+4. Enter the keystore password and alias, then select the release build variant.
+5. Click Finish to generate the signed app-release.apk.
+
+Step 3: Setting Up Developer Account
+1. Visit the Google Play Developer Console.
+2. Choose an account type (Organization or Yourself/Individual).
+3. Verify your identity.
+4. Pay the one-time registration fee of USD 25.
+
+Step 4: Uploading and Publishing
+1. Log in to the Console and click Create Application.
+2. Store Listing: Provide the app title, description, icons, and screenshots.
+3. Upload: Upload the signed APK file generated in Step 2.
+4. Configuration: Set pricing (free or paid) and distribution regions.
+5. Submit: Click Publish to submit the app for review.
+4. Post-Deployment
+
+After publishing, developers should use App Store Optimization (ASO)
+techniques and promote the app via social media or online advertising to
+improve visibility and reach a wider audience.
